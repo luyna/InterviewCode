@@ -1,7 +1,7 @@
 package leetcode;
 
 /**
- * 二分检索：注意while(left<=right) left=mid+1 right=mid-1 三处的一致性
+ * 二分检索：注意right=array.length-1、while(left<=right) left=mid+1 right=mid-1 三处的一致性
  * 如果while(left<right) 则相应的应该写成left=mid,right=mid
  * @author Luyna
  * 2015年1月13日
@@ -9,7 +9,7 @@ package leetcode;
 public class BinarySearch {
 	public static int Search(int [] array,int val){
 		if(array.length==0) return -1;
-		int left=0,right=array.length;
+		int left=0,right=array.length-1;
 		int mid=left;
 		while(left<=right){
 			mid=left+(right-left)/2;
@@ -22,7 +22,7 @@ public class BinarySearch {
 	
 	public static void main(String [] args){
 		int [] test1={1};
-		int [] test2={1,3,4};
+		int [] test2={1,3,4,5};
 		int [] test3={};
 		System.out.println("1:"+Search(test1,0));
 		System.out.println("2:"+Search(test1,1));
