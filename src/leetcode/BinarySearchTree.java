@@ -50,8 +50,10 @@ public class BinarySearchTree {
 		}
 		
 		boolean leftresult=true,rightresult=true;
+		//判断左子树序列是不是有效的二叉搜索树
 		if(i>0)
 			leftresult=verifySeqOfBST(postorder,start,i-1);//注意下标的指针，此处end=i-1,而不是start+i-1
+		//判断右子树序列是不是有效的二叉搜索树
 		if(i<end)
 			rightresult=verifySeqOfBST(postorder,i,end-1);
 		return leftresult&&rightresult;
