@@ -331,28 +331,25 @@ public class BinaryTree {
 	    List<Integer> curpath=new ArrayList<Integer>();
 	    int [] sumval={sum,0}; //保存期望值和当前值
 	    if(root==null) return result;
-	    result=pathSumProcessor(root,result,curpath,sumval);
+	    result=pathSumProcessor(root,result,curpath,sum);
 	    return result;
 	}
 	public List<List<Integer>> pathSumProcessor
-	(TreeNode root, List<List<Integer>> result,List<Integer> curpath,int[] sumval) {
-	    sumval[1]=sumval[1]+root.val;
+	(TreeNode root, List<List<Integer>> result,List<Integer> curpath,int sum) {	    
 	    curpath.add(root.val);
 	    //当前节点为子节点
 		if(root.left==null && root.right==null){
 			//因为链表都是引用型，后面会对当前路径链表进行修改，所以加入result中的当前路径要保存一个副本
 			List<Integer> list=new ArrayList<Integer>(curpath);
-	    	if(sumval[0]==sumval[1]) result.add(list);	 
-	    	
+	    	if(sum==root.val) result.add(list);	 	    	
 	    }
 		if(root.left!=null){
-			pathSumProcessor(root.left,result,curpath,sumval);
+			pathSumProcessor(root.left,result,curpath,sum-root.val);
 		}
 		if(root.right!=null){
-			pathSumProcessor(root.right,result,curpath,sumval);
+			pathSumProcessor(root.right,result,curpath,sum-root.val);
 		}
-		//当前节点访问结束后，递归函数自动回到它的父节点，所以在函数返回之前要对当前路径和数值和做修改
-		sumval[1]=sumval[1]-root.val;
+		//当前节点访问结束后，递归函数自动回到它的父节点，所以在函数返回之前要对当前路径做修改
 		curpath.remove(curpath.size()-1);
 		return result;
 	    
