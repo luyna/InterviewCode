@@ -10,6 +10,15 @@ package leetcode;
  * 4、102 107 层次遍历二叉树
  * 5、105 先序序列和中序序列重构二叉树
  * 6、106 后序序列和中序序列重构二叉树
+ * 
+ * 剑指offer题目：
+ * 7、是否包含二叉树
+ * 8、二叉树的镜像
+ * 
+ * 9、Leetcode NO.113找出二叉树中所有和为指定sum的路径（从根节点到叶子节点的所有数值和）
+ * 10、Leetcode NO.112 判断二叉树中是否存在和为指定sum的路径
+ * 
+ * 
  * @author luyna 2015年1月12日
  * 
  */
@@ -294,6 +303,95 @@ public class BinaryTree {
 		if(i>0) root.right=buildTreePostInProcessor(inorder,inend,postorder,postend-1,i);
 		return root;
 	}
+	
+	/**
+	 * 8、二叉树的镜像
+	 * 思路：先序遍历一棵树，如果遍历到的节点有子节点，就交换它的两个子节点，当
+	 * 交换完所有非叶子节点的左右节点后，就得到了它的镜像
+	 * @param args
+	 */
+	public void mirrorRecursively(TreeNode root){
+		if(root==null || (root.left==null && root.right==null))
+			return ;
+		TreeNode tmp=root.left;
+		root.left=root.right;
+		root.right=tmp;
+		if(root.left!=null) mirrorRecursively(root.left);
+		if(root.right!=null) mirrorRecursively(root.right);
+	}
+	
+	/**
+	 * 9、Leetcode NO.113找出二叉树中所有和为指定sum的路径（从根节点到叶子节点的所有数值和）
+	 * @param root
+	 * @param sum
+	 * @return
+	 */
+	public List<List<Integer>> pathSum(TreeNode root, int sum) {
+	    List<List<Integer>> result=new ArrayList<List<Integer>>();
+	    List<Integer> curpath=new ArrayList<Integer>();
+	    int [] sumval={sum,0}; //保存期望值和当前值
+	    if(root==null) return result;
+	    result=pathSumProcessor(root,result,curpath,sumval);
+	    return result;
+	}
+	public List<List<Integer>> pathSumProcessor
+	(TreeNode root, List<List<Integer>> result,List<Integer> curpath,int[] sumval) {
+	    sumval[1]=sumval[1]+root.val;
+	    curpath.add(root.val);
+	    //当前节点为子节点
+		if(root.left==null && root.right==null){
+			//因为链表都是引用型，后面会对当前路径链表进行修改，所以加入result中的当前路径要保存一个副本
+			List<Integer> list=new ArrayList<Integer>(curpath);
+	    	if(sumval[0]==sumval[1]) result.add(list);	 
+	    	
+	    }
+		if(root.left!=null){
+			pathSumProcessor(root.left,result,curpath,sumval);
+		}
+		if(root.right!=null){
+			pathSumProcessor(root.right,result,curpath,sumval);
+		}
+		//当前节点访问结束后，递归函数自动回到它的父节点，所以在函数返回之前要对当前路径和数值和做修改
+		sumval[1]=sumval[1]-root.val;
+		curpath.remove(curpath.size()-1);
+		return result;
+	    
+	}
+	
+	/**
+	 * 10、Leetcode NO.112 判断二叉树中是否存在和为指定sum的路径
+	 * 
+	 * @param root
+	 * @param sum
+	 * @return
+	 */
+	public boolean hasPathSum(TreeNode root, int sum) {
+		if(root==null) return false;
+		if(root.left==null && root.right==null){
+			return root.val==sum;
+		}
+		return hasPathSum(root.left,sum-root.val) || hasPathSum(root.right,sum-root.val);
+		//非递归的先序遍历，由于栈的弹出节点可能不是连续的父子节点顺序，所以无法在合适的位置改变cursum值
+		/*Stack<TreeNode> stack=new Stack<TreeNode>();
+		int cursum=0;
+		if(root==null) return false;
+		while(root!=null || !stack.isEmpty()){
+			if(root!=null){
+				cursum +=root.val;
+				stack.push(root);
+				if(root.left==null && root.right==null){
+					if(cursum==sum) return true;
+					else cursum -=root.val;
+				}
+				root=root.left;
+			}else{
+				root=stack.pop();
+				root=root.right;
+			}			
+		}
+        return false;*/
+    }
+
 	
 	public static void main(String [] args){
 		int[] inorder={1,2,3,4};
