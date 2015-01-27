@@ -45,14 +45,6 @@ one. So when pA/pB reaches the end of a list, record the last element of
  * “截断”与短链表长度相同，依次遍历比较如果发现有两个节点的值相同，那么说明从该节点开始两链表开始出现交集。
  */
  
-class ListNode {
-    int val;
-    ListNode next;
-    ListNode(int x) {
-        val = x;
-        next = null;
-    }
-}
 
 public class LinkedListIntersection {
 	public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
