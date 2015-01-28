@@ -11,14 +11,16 @@ package leetcode;
  * 5、105 先序序列和中序序列重构二叉树
  * 6、106 后序序列和中序序列重构二叉树
  * 
+ * 
  * 剑指offer题目：
  * 7、是否包含二叉树
  * 8、二叉树的镜像
  * 
- * 9、Leetcode NO.113找出二叉树中所有和为指定sum的路径（从根节点到叶子节点的所有数值和）
+ *  9、Leetcode NO.113找出二叉树中所有和为指定sum的路径（从根节点到叶子节点的所有数值和）
  * 10、Leetcode NO.112 判断二叉树中是否存在和为指定sum的路径
- * 
- * 
+ * 11、Leetcode NO.104 树的最大深度
+ * 12、Leetcode NO.111 树的最小深度
+ * 13、Leetcode NO.110 剑指offerP209 判断二叉树是否是平衡二叉树
  * @author luyna 2015年1月12日
  * 
  */
@@ -388,8 +390,80 @@ public class BinaryTree {
 		}
         return false;*/
     }
-
 	
+	 
+	 /**
+	  * 11、Leetcode NO.104 树的最大深度
+	  * 最大深度指：从根节点到叶子节点的最长路径中的节点数
+	  * @param root
+	  * @return
+	  */
+	 public int maxDepth(TreeNode root) {
+	     if(root==null) return 0;
+	     int left=maxDepth(root.left)+1;
+	     int right=maxDepth(root.right)+1;
+	     return left>right?left:right;
+	 }
+	 /**
+	  * 12、Leetcode NO.111 树的最小深度
+	  * 最小深度是指：从根节点到叶子节点最短路径中的节点数
+	  * @param root
+	  * @return
+	  */
+	 public int minDepth(TreeNode root) {
+		 if(root==null) return 0;
+		 int left=minDepth(root.left);
+		 int right=minDepth(root.right);
+		 if(left==0 && right!=0) return right+1;
+		 else if(left!=0 && right==0) return left+1;
+	     return left<right?left+1:right+1;
+	 }
+	 
+	
+	 /**
+	  * 13、Leetcode NO.110 剑指offerP209 判断二叉树是否是平衡二叉树
+	  * 思路一：用递归的思想判断左右子树的高度差是否大于1
+	  * 缺点：重复计算
+	  * @param root
+	  * @return
+	  */
+	/* public boolean isBalanced(TreeNode root) {
+	     if(root==null) return true;   
+	     int left=maxDepth(root.left);
+	     int right=maxDepth(root.right);
+	     int diff=left-right;
+	     if(diff>1 || diff<-1) return false;
+	     return isBalanced(root.left) && isBalanced(root.right);
+	 }*/
+	 /**
+	  * 13、思路二：遍历每个节点时记录下节点的深度，从下往上计算
+	  * 备忘录思想
+	  * @param root
+	  * @return
+	  */
+	 public boolean isBalanced(TreeNode root) {
+		 return isBalancedHelper(root)!=-1;
+	 }
+	 /**
+	  * 从下向上遍历计算
+	  * @param root
+	  * @return 若平衡，返回节点所在的高度；若不平衡，返回-1
+	  */
+	 public int isBalancedHelper(TreeNode root){
+		 if(root==null) {
+			 return 0;
+		 }
+		 int left=isBalancedHelper(root.left);
+		 if(left==-1) return -1;  //若左子树不平衡，返回-1
+		 int right=isBalancedHelper(root.right);
+		 if(right==-1) return -1; //若右子树不平衡，返回-1
+		 //若左右子树都平衡，则判断当前节点是否平衡
+		 int diff=left-right;
+		 if(diff>1 || diff<-1) return -1;
+		 else return diff>0?left+1:right+1;
+	 }
+	 
+	 
 	public static void main(String [] args){
 		int[] inorder={1,2,3,4};
 		int[] postorder={1,3,4,2};
